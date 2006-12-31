@@ -1,5 +1,7 @@
 package com.mapki.antfarm.creatures;
 
+import java.util.Random;
+
 import javax.vecmath.Vector3d;
 
 public class Ant {
@@ -62,6 +64,12 @@ public class Ant {
 
     public void tick() {
         move();
+        reaim();
+    }
+
+    private void reaim() {
+        Random r = new Random();
+        velocity = new Vector3d(r.nextDouble(), r.nextDouble(), r.nextDouble());
     }
 
     private void move() {
