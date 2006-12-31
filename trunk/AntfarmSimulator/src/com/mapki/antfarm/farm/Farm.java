@@ -1,6 +1,7 @@
 package com.mapki.antfarm.farm;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 
 import javax.vecmath.Vector3d;
 
@@ -32,5 +33,15 @@ public class Farm {
     
     public Vector3d getSize() {
         return size;
+    }
+
+    public void tick() {
+        for (Ant ant : ants) {
+            ant.tick();
+        }
+    }
+    
+    public ArrayList<Ant> getAnts() {
+        return ants;
     }
 }

@@ -1,5 +1,6 @@
 package com.mapki.antfarm.game;
 
+import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -11,10 +12,13 @@ public class AntGame {
     private int time;
     private Timer timer;
     private TimerTask tTask;
+    private ArrayList<TickListener> listeners;
     
     public AntGame(Farm f, int stepTime) {
         farm = f;
         time = stepTime;
+        
+        listeners = new ArrayList<TickListener>();
         
         initTimer();
     }
@@ -24,10 +28,21 @@ public class AntGame {
         tTask = new TimerTask() {
         
             public void run() {
-                System.err.println("Tick");
+                farm.tick();
+                notifyTickListeners();
             }
         
         };
+    }
+
+    public void addTickListener(TickListener listener) {
+        listeners.add(listener);
+    }
+    
+    protected void notifyTickListeners() {
+        for (TickListener listener : listeners) {
+            listener.tickHappened();
+        }
     }
 
     public void start() {
@@ -39,6 +54,10 @@ public class AntGame {
         
         tTask.cancel();
         timer.cancel();
+    }
+
+    public Farm getFarm() {
+        return farm;
     }
 
 }
