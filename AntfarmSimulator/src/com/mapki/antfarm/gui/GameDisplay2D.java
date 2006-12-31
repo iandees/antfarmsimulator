@@ -8,14 +8,16 @@ import java.awt.event.WindowEvent;
 import javax.swing.JFrame;
 
 import com.mapki.antfarm.game.AntGame;
+import com.mapki.antfarm.game.TickListener;
 
-public class GameDisplay2D implements GameDisplay {
+public class GameDisplay2D implements GameDisplay, TickListener {
     private AntGame game;
     private JFrame window;
     private AntDrawPanel antDrawer;
     
     public GameDisplay2D(AntGame g) {
         game = g;
+        game.addTickListener(this);
         
         init();
     }
@@ -45,5 +47,9 @@ public class GameDisplay2D implements GameDisplay {
         game.stop();
         window.setVisible(false);
         System.exit(0);
+    }
+
+    public void tickHappened() {
+        antDrawer.tick();
     }
 }

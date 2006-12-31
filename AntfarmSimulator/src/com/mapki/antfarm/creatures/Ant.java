@@ -59,4 +59,12 @@ public class Ant {
     public Vector3d getVelocity() {
         return velocity;
     }
+
+    public void tick() {
+        move();
+    }
+
+    private void move() {
+        location.add(velocity);
+    }
 }
