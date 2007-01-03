@@ -3,6 +3,7 @@ package com.mapki.antfarm.farm;
 import java.util.ArrayList;
 import java.util.Iterator;
 
+import javax.vecmath.Tuple3d;
 import javax.vecmath.Vector3d;
 
 import com.mapki.antfarm.creatures.Ant;
@@ -50,14 +51,12 @@ public class Farm {
         
         for (int i = 0; i < ants.size(); i++) {
             if(ants.get(i).getHealth() < 1) {
-                System.err.println("Ant died.");
                 ants.remove(i);
             }
         }
         
         for (int i = 0; i < scents.size(); i++) {
             if(scents.get(i).getStrength() < 1) {
-                System.err.println("Scent died.");
                 scents.remove(i);
             }
         }
@@ -73,5 +72,31 @@ public class Farm {
 
     public void dropScent(Ant ant, Scent sc) {
         scents.add(sc);
+    }
+
+    public Scent getNearestScentTo(Ant ant) {
+        double antDistFromOrigin = ant.getLocation().length();
+        double shortestDistance = 100.0;
+        Scent closestScent = null;
+        
+        for (Scent scent : scents) {
+            double distance = Math.abs(antDistFromOrigin - scent.getLocation().length());
+            
+            if(distance < shortestDistance) {
+                closestScent = scent;
+            }
+        }
+        
+        return closestScent;
+    }
+
+    /**
+     * @param loc
+     * @return True if the location is inside of this farm's bounds.
+     */
+    public boolean checkBounds(Tuple3d loc) {
+        return (loc.x > 0 || loc.x < size.x) 
+        && (loc.y > 0 || loc.y < size.y) 
+        && (loc.z > 0 || loc.z < size.z);
     }
 }
