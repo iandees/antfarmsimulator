@@ -14,6 +14,8 @@ public class Ant {
 
     private static final double MOVEMENT_HEALTH_CONSTANT = 0.98;
 
+    private static final double HALF_PI = Math.PI / 2.0;
+
     /** The ant's location in 3D space. */
     private Vector3d location;
     
@@ -78,14 +80,46 @@ public class Ant {
     }
 
     private void dropScent() {
-        farm.dropScent(this, new Scent(getLocation(), ScentType.TRAIL));
+        farm.dropScent(this, new Scent(new Vector3d(getLocation()), ScentType.TRAIL));
     }
 
     private void reaim() {
         Random r = new Random();
-        velocity = new Vector3d(r.nextInt(2) == 0 ? r.nextDouble() : -r.nextDouble(),
-                r.nextInt(2) == 0 ? r.nextDouble() : -r.nextDouble(),
-                0);
+        Vector3d closestScentLoc = farm.getNearestScentTo(this).getLocation();
+        Vector3d newVelocity = null;
+        Vector3d newLocation = new Vector3d();
+        double angle = 0;
+        boolean angleIsBad = true;
+        boolean boundsAreBad = true;
+        
+        if(closestScentLoc == null) {
+            newVelocity = new Vector3d(r.nextInt(2) == 0 ? r.nextDouble() : -r.nextDouble(), r.nextInt(2) == 0 ? r
+                    .nextDouble() : -r.nextDouble(), 0);
+        } else {
+            do {
+                Vector3d diff = new Vector3d();
+                diff.sub(closestScentLoc, getLocation());
+
+                newVelocity = new Vector3d(r.nextInt(2) == 0 ? r.nextDouble() : -r.nextDouble(), r.nextInt(2) == 0 ? r
+                        .nextDouble() : -r.nextDouble(), 0);
+                if(diff.length() == 0) {
+                    break;
+                }
+                angle = diff.angle(newVelocity);
+                newLocation.add(getLocation(), newVelocity);
+                if(angle > (HALF_PI + 2)) {
+                    angleIsBad = false;
+                }
+                
+                if(farm.checkBounds(newLocation)) {
+                    boundsAreBad = false;
+                }
+                System.err.println("\t" + newLocation + "\t" + Math.toDegrees(angle) + "\tB: " + boundsAreBad + "\tA: " + angleIsBad);
+            } while (angleIsBad); //(angle < (HALF_PI + 1)) && farm.checkBounds(newLocation));
+        }
+        
+        System.err.println(Math.toDegrees(angle));
+        velocity = newVelocity;
     }
 
     private void move() {

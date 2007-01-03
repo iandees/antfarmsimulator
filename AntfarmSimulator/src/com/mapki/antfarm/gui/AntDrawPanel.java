@@ -34,25 +34,25 @@ public class AntDrawPanel extends JPanel {
     }
 
     public void paint(Graphics g) {
+        super.paint(g);
 
-        g.setColor(Color.black);
-        ArrayList<Ant> ants = game.getFarm().getAnts();
-        for (Ant ant : ants) {
-            int x = (int) ant.getLocation().x;
-            int y = (int) ant.getLocation().y;
-            g.fillRect(x, y, 4, 4);
-        }
-
-        g.setColor(Color.blue);
+        g.setColor(Color.red);
         ArrayList<Scent> scents = game.getFarm().getScents();
         for (Scent scent : scents) {
             int x = (int) scent.getLocation().x;
             int y = (int) scent.getLocation().y;
+            
             g.fillRect(x, y, 2, 2);
         }
-        
-        //super.paint(g);
-        
+
+        g.setColor(Color.green);
+        ArrayList<Ant> ants = game.getFarm().getAnts();
+        for (Ant ant : ants) {
+            int x = (int) ant.getLocation().x;
+            int y = (int) ant.getLocation().y;
+            
+            g.fillRect(x, y, 2, 2);
+        }
     }
     
 }
