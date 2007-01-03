@@ -95,8 +95,8 @@ public class Farm {
      * @return True if the location is inside of this farm's bounds.
      */
     public boolean checkBounds(Tuple3d loc) {
-        return (loc.x > 0 || loc.x < size.x) 
-        && (loc.y > 0 || loc.y < size.y) 
-        && (loc.z > 0 || loc.z < size.z);
+        return (loc.x >= 0 && loc.x <= size.x) 
+        && (loc.y >= 0 && loc.y <= size.y) 
+        && (loc.z >= 0 && loc.z <= size.z);
     }
 }

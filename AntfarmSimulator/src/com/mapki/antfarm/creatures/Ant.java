@@ -107,7 +107,7 @@ public class Ant {
                 }
                 angle = diff.angle(newVelocity);
                 newLocation.add(getLocation(), newVelocity);
-                if(angle > (HALF_PI + 2)) {
+                if(angle > (HALF_PI + 1)) {
                     angleIsBad = false;
                 }
                 
@@ -115,10 +115,9 @@ public class Ant {
                     boundsAreBad = false;
                 }
                 System.err.println("\t" + newLocation + "\t" + Math.toDegrees(angle) + "\tB: " + boundsAreBad + "\tA: " + angleIsBad);
-            } while (angleIsBad); //(angle < (HALF_PI + 1)) && farm.checkBounds(newLocation));
+            } while (angleIsBad && boundsAreBad); //(angle < (HALF_PI + 1)) && farm.checkBounds(newLocation));
         }
         
-        System.err.println(Math.toDegrees(angle));
         velocity = newVelocity;
     }
 
