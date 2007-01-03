@@ -97,6 +97,9 @@ public class Ant {
                     .nextDouble() : -r.nextDouble(), 0);
         } else {
             do {
+                angleIsBad = true;
+                boundsAreBad = true;
+                
                 Vector3d diff = new Vector3d();
                 diff.sub(closestScentLoc, getLocation());
 
@@ -114,8 +117,7 @@ public class Ant {
                 if(farm.checkBounds(newLocation)) {
                     boundsAreBad = false;
                 }
-                System.err.println("\t" + newLocation + "\t" + Math.toDegrees(angle) + "\tB: " + boundsAreBad + "\tA: " + angleIsBad);
-            } while (angleIsBad && boundsAreBad); //(angle < (HALF_PI + 1)) && farm.checkBounds(newLocation));
+            } while (angleIsBad || boundsAreBad);
         }
         
         velocity = newVelocity;
