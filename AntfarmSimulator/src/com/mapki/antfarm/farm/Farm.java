@@ -18,7 +18,7 @@ public class Farm {
     private ArrayList<Scent> scents;
     
     public Farm() {
-        this(40,40,1);
+        this(100,100,1);
     }
     
     public Farm(int x, int y, int z) {

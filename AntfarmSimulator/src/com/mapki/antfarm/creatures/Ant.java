@@ -74,9 +74,9 @@ public class Ant {
     }
 
     public void tick() {
+        reaim();
         dropScent();
         move();
-        reaim();
     }
 
     private void dropScent() {
@@ -85,41 +85,45 @@ public class Ant {
 
     private void reaim() {
         Random r = new Random();
-        Vector3d closestScentLoc = farm.getNearestScentTo(this).getLocation();
+        Scent nearest = farm.getNearestScentTo(this);
+        if(nearest == null) {
+            velocity = new Vector3d(2.0 * (r.nextDouble()) - 1.0, 2.0 * (r.nextDouble()) - 1.0, 0);
+            return;
+        }
+        
+        Vector3d closestScentLoc = nearest.getLocation();
         Vector3d newVelocity = null;
         Vector3d newLocation = new Vector3d();
         double angle = 0;
         boolean angleIsBad = true;
         boolean boundsAreBad = true;
-        
-        if(closestScentLoc == null) {
-            newVelocity = new Vector3d(r.nextInt(2) == 0 ? r.nextDouble() : -r.nextDouble(), r.nextInt(2) == 0 ? r
-                    .nextDouble() : -r.nextDouble(), 0);
-        } else {
-            do {
-                angleIsBad = true;
-                boundsAreBad = true;
-                
-                Vector3d diff = new Vector3d();
-                diff.sub(closestScentLoc, getLocation());
 
-                newVelocity = new Vector3d(r.nextInt(2) == 0 ? r.nextDouble() : -r.nextDouble(), r.nextInt(2) == 0 ? r
-                        .nextDouble() : -r.nextDouble(), 0);
-                if(diff.length() == 0) {
-                    break;
-                }
-                angle = diff.angle(newVelocity);
-                newLocation.add(getLocation(), newVelocity);
-                if(angle > (HALF_PI + 1)) {
-                    angleIsBad = false;
-                }
-                
-                if(farm.checkBounds(newLocation)) {
-                    boundsAreBad = false;
-                }
-            } while (angleIsBad || boundsAreBad);
-        }
-        
+        do {
+            angleIsBad = true;
+            boundsAreBad = true;
+            newLocation = new Vector3d();
+
+            Vector3d diff = new Vector3d();
+            diff.sub(closestScentLoc, getLocation());
+
+            newVelocity = new Vector3d(2.0 * (r.nextDouble()) - 1.0, 2.0 * (r.nextDouble()) - 1.0, 0);
+            if(diff.length() == 0) {
+                break;
+            }
+            angle = diff.angle(newVelocity);
+            newLocation.add(getLocation(), newVelocity);
+
+            if(angle > (HALF_PI)) {
+                angleIsBad = false;
+            }
+
+            if(farm.checkBounds(newLocation)) {
+                boundsAreBad = false;
+            }
+
+            //System.err.println(newLocation + "\t" + Math.toDegrees(angle) + "\tB: " + boundsAreBad + "\tA: " + angleIsBad);
+        } while (angleIsBad || boundsAreBad);
+
         velocity = newVelocity;
     }
 
