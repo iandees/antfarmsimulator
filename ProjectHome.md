@@ -1,0 +1,1 @@
+A simulator that is meant to simulate ants in an 'ant farm.' I'm trying to apply behavioral programming to the way in which ants move and communicate. Each ant is in fact a 'robot' that communicates with the other ants in this simulation via scents.
